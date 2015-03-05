@@ -38,7 +38,7 @@ parse: function(data) {
                 parsedArray.push({
                     id: oItem['id']['$t'],
                     name: oItem['gsx$name']['$t'],
-                    field: oItem['gsx$name']['$t'],
+                    field: oItem['gsx$field']['$t'],
                     accomplishments: oItem['gsx$thingsshesdone']['$t'],
                     rating: parseInt(oItem['gsx$arbitaryratingofbadassery']['$t'], 10),
                     wiki: oItem['gsx$wikipage']['$t'],

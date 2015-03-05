@@ -1,5 +1,5 @@
-
-   var Woman = Backbone.Model.extend({
+//Woman Model for WomenCollections
+var Woman = Backbone.Model.extend({
     defaults: {
         name: 'Shero',
         id : 'file',
@@ -69,7 +69,7 @@ var womenView = Backbone.View.extend({
             this.$el.append(womanView.render().el);
         },this);
         // apend the element to body if not exists
-        $(this.$el).appendTo('body');
+        $(this.$el).appendTo('#content');
     }
 });
 
@@ -173,8 +173,27 @@ womenCall.fetch()
                 /* show the layout in the region we created at the top of this file */
                 //app.appRegion.show(layout);
                 var womensCollection = new WomanCollection(womenCall.get('dataset'));
+                console.log(typeof(womanCollection));
                 var wv = new womenView ({collection: womensCollection});
                 wv.render();
             });
-//var wv = new womenView ({collection: womanCollection});
- //wv.render();
+
+//Shuffle function for randomizing women
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex ;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}

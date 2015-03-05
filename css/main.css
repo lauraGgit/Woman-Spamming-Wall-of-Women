@@ -2,6 +2,9 @@
   
   .header { background: #111; position:fixed; top:0; width: 100%; z-index: 100;}
   .navbar-inverse{background: #111}
+  .container-fluid {
+  	padding: 5px;
+  }
   .navbar-inverse .navbar-brand {
   color: #efefef;
   font-weight: 500;

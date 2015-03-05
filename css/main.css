@@ -28,7 +28,7 @@
 }
 	.bio {padding: 5px 10px 0;}
 	span.field {font-style: italic;}
-	.women-list li.hover {background: rgba(255, 255, 255, 0.15); transition: background-color 0.3s ease;  }
+	.women-list li.hover {background: rgba(255, 255, 255, 0.12); transition: background-color 0.3s ease;  }
 	.slide-up {display: none; position: absolute; bottom: 0; font-size: 14px; width: 100%; padding: 10px; margin: 0;
 	 transition: display 0.3s ease;
 	     width: 100%;

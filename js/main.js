@@ -46,6 +46,7 @@ parse: function(data) {
                     imgUrl: oItem['gsx$imageforvisualizationpurposes']['$t']
                 });
             });
+            shuffle(parsedArray);
             return ({dataset:parsedArray});
         }
    });

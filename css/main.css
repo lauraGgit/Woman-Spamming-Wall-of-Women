@@ -1,14 +1,21 @@
   body {background-color: #222; color: #fff}
   
-  .header {padding: 15px; background: #111; position:fixed; top:0; width: 100%; z-index: 100;}
+  .header { background: #111; position:fixed; top:0; width: 100%; z-index: 100;}
+  .navbar-inverse{background: #111}
+  .navbar-inverse .navbar-brand {
+  color: #efefef;
+  font-weight: 500;
+  font-size: 22px;
+}
+  .header .site-title {display: inline;}
   .container {width: inherit; margin-top: 60px;}
-  .image-box {height: 225px; width: 30vw; background-position: center; background-repeat: no-repeat;position: relative;margin: 0;}
+  .image-box {height: 225px; width: 30vw; background-position: center top; background-repeat: no-repeat;position: relative;margin: 0;}
   .women-list {
     list-style-type: none;
 
 }
 	.women-list a, .women-list a:visited {color: #fff}
-	.women-list li {float: left; padding: 10px 0; margin-left: 30px;     
+	.women-list li {float: left; padding: 0px 0 5px; margin-left: 30px;     
     background: rgba(255, 255, 255, 0.08);
     margin: 5px;
     border: 2px solid rgba(30, 30, 30, 1.0);

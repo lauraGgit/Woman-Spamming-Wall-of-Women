@@ -1,5 +1,5 @@
   body {background-color: #222; color: #fff}
-  
+  h5 {margin: 0; font-size: 1.17em;}
   .header { background: #111; position:fixed; top:0; width: 100%; z-index: 100;}
   .navbar-inverse{background: #111}
   .container-fluid {
@@ -9,6 +9,9 @@
   color: #efefef;
   font-weight: 500;
   font-size: 22px;
+}
+.nav-right{
+	margin-right: -5px;
 }
   .header .site-title {display: inline;}
   .container {width: inherit; margin-top: 60px;}
@@ -31,4 +34,4 @@
 	     width: 100%;
     box-sizing: border-box;
 	 }
-	.women-list li.hover .slide-up {display:block; transition: display 0.3s ease; background: #222;}
+	.women-list li.hover .slide-up {display:block; transition: display 0.7s ease; background: #222;}

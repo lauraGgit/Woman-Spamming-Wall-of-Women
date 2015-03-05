@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>WomanSpamming Wall of Women</title>
+  </head>
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <style type="text/css">
+  body {background-color: #111111; color: #fff}
+  .image-box {height: 225px; width: 30vw; background-position: center; background-repeat: no-repeat;position: relative;margin: 0;}
+  .women-list {
+    list-style-type: none;
+
+}
+	.women-list a, .women-list a:visited {color: #fff}
+	.women-list li {float: left; padding: 10px 0; margin-left: 30px;     
+    background: rgba(255, 255, 255, 0.08);
+    margin: 5px;
+    border: 2px solid rgba(30, 30, 30, 1.0);
+}
+	.bio {padding: 5px 10px 5px;}
+	span.field {font-style: italic;}
+	.women-list li.hover {background: rgba(255, 255, 255, 0.15); transition: background-color 0.3s ease;  }
+	.slide-up {display: none; position: absolute; bottom: 0; font-size: 14px; width: 100%; padding: 10px; margin: 0;
+	 transition: display 0.3s ease;
+	     width: 100%;
+    box-sizing: border-box;
+	 }
+	.women-list li.hover .slide-up {display:block; transition: display 0.3s ease; background: #222;}
+
+  </style>
+<body>
+<div class="header"></div>
+
+<div class="container">
+    <div class="row">
+        <div id="content" class="span12>"></div>
+    </div>
+
+</div>
+
+  <script type="text/template" id="womanTemplate">
+    <div class="view woman-box"> 
+    
+   	<a href='<%= wiki %>'><div class="image-box" style="background-image: url(<%= imgUrl %>)"><div class="slide-up"><%= funfact %></div></div>
+   	<div class ="bio">
+   	<h3><%= name %></h3></a>
+      <span class="field"><%= field %></span><br />
+      <span class="accomplish"><%= accomplishments %></span><br />
+      </bio>
+    </div>
+  </script>  
+
+<script src="lib/jquery-1.7.2.min.js"></script>
+<script src="lib/underscore-min.js"></script>
+<script src="lib/backbone-min.js"></script>
+
+
+  <script src="js/main.js"></script>
+
+	 
+	  </body>
+</html>

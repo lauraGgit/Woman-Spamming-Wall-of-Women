@@ -62,7 +62,6 @@ var womenView = Backbone.View.extend({
         //filter through all the items in a collections
         //for each, create a new PersonView
         //append it to root element
-        this.collection.reset(this.collection.shuffle(), {silent:true});
         this.collection.each(function(woman){
             //console.log(person);
             var womanView = new WomanView({model:woman});
@@ -126,6 +125,7 @@ womenCall.fetch()
                 /* show the layout in the region we created at the top of this file */
                 //app.appRegion.show(layout);
                 var womensCollection = new WomanCollection(womenCall.get('dataset'));
+                womensCollection.reset(womensCollection.shuffle(), {silent:true});
                 var wv = new womenView ({collection: womensCollection});
                 wv.render();
             });

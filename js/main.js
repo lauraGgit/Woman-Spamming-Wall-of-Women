@@ -146,18 +146,28 @@ womenCall.fetch()
                 initCollection.reset(initCollection.first(loadmore), {silent:true});
                 var wv = new womenView ({collection: initCollection});
                 wv.render();
+                
                 $(window).scroll(function() {
                        if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                        if (loadmore < (womensCollection.length)) {
                         //socket.emit('get older posts', skipNum);
                         //skipNum += 10;
                         console.log("scroll");
                         //Add new women
                         clone = _.clone(womensCollection);
+                        console.log(loadmore);
                         clone.reset(clone.rest(loadmore), {silent:true});
-                        loadmore += loadmore;
+                        console.log("clone length:");
+                        console.log(clone.length);
+                        clone.reset(clone.first(9), {silent:true});
+                        console.log('cut clone');
+                        console.log(clone.length);
                         var moreWomen = new womenAddView ({collection: clone});
                          moreWomen.render();
+                        loadmore += 9;
+                    }
                        }
                     });
+                
             });
 

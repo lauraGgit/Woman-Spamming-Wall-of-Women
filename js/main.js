@@ -65,7 +65,7 @@ var womenView = Backbone.View.extend({
         this.collection.each(function(woman){
             //console.log(person);
             var womanView = new WomanView({model:woman});
-            this.$el.append(womanView.render().el);
+            this.$el.append($(womanView.render().el).hide().fadeIn("2000"));
         },this);
         // apend the element to body if not exists
         $(this.$el).appendTo('#content');
@@ -104,6 +104,25 @@ var WomanView = Backbone.View.extend({
 
 });
 
+//Additional Women
+var womenAddView = Backbone.View.extend({
+    //tagName: 'ul',
+    //className: 'women-list',
+    render: function(){
+        //filter through all the items in a collections
+        //for each, create a new PersonView
+        //append it to root element
+        this.collection.each(function(woman){
+            //console.log(person);
+            var womanView = new WomanView({model:woman});
+            //this.$el.append($(womanView.render().el).hide().fadeIn("2000"));
+            $('.women-list').append($(womanView.render().el).hide().fadeIn("2000"));
+        },this);
+        // apend the element to body if not exists
+        //$(this.$el).appendTo('#content');
+    }
+});
+
 var modelwoman = new Woman();
 var viewwoman = new WomanView({model : modelwoman});
 
@@ -112,6 +131,7 @@ var viewwoman = new WomanView({model : modelwoman});
 
 
 //Initialize Views
+var loadmore = 9;
 womenCall = new Women();
 womenCall.fetch()
             .fail(function() {
@@ -119,16 +139,25 @@ womenCall.fetch()
                 //console.log("fail");
             })
             .done(function() {
-                /* on successfully loading the data, create a new instance of the main layout view,
-                    and feed the model into it. */
-                //var layout = new module.GardenLayoutView({model: baseModel});
-                /* show the layout in the region we created at the top of this file */
-                //app.appRegion.show(layout);
+
                 var womensCollection = new WomanCollection(womenCall.get('dataset'));
                 womensCollection.reset(womensCollection.shuffle(), {silent:true});
-                //initCollection = womensCollection.first(5);
-                //console.log(womensCollection.first(5));
-                var wv = new womenView ({collection: womensCollection});
+                initCollection = _.clone(womensCollection);
+                initCollection.reset(initCollection.first(loadmore), {silent:true});
+                var wv = new womenView ({collection: initCollection});
                 wv.render();
+                $(window).scroll(function() {
+                       if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                        //socket.emit('get older posts', skipNum);
+                        //skipNum += 10;
+                        console.log("scroll");
+                        //Add new women
+                        clone = _.clone(womensCollection);
+                        clone.reset(clone.rest(loadmore), {silent:true});
+                        loadmore += loadmore;
+                        var moreWomen = new womenAddView ({collection: clone});
+                         moreWomen.render();
+                       }
+                    });
             });
 

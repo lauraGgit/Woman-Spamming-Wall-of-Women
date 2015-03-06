@@ -75,7 +75,7 @@ var womenView = Backbone.View.extend({
 // The view for a Woman
 var WomanView = Backbone.View.extend({
     tagName : 'li',
-    className : 'woman',
+    className : 'woman col-md-4',
     id : 'woman-id',
     template: _.template( $('#womanTemplate').html() ),
     initialize : function(){
@@ -126,6 +126,8 @@ womenCall.fetch()
                 //app.appRegion.show(layout);
                 var womensCollection = new WomanCollection(womenCall.get('dataset'));
                 womensCollection.reset(womensCollection.shuffle(), {silent:true});
+                //initCollection = womensCollection.first(5);
+                //console.log(womensCollection.first(5));
                 var wv = new womenView ({collection: womensCollection});
                 wv.render();
             });

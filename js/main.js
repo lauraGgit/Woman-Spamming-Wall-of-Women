@@ -46,7 +46,6 @@ parse: function(data) {
                     imgUrl: oItem['gsx$imageforvisualizationpurposes']['$t']
                 });
             });
-            shuffle(parsedArray);
             return ({dataset:parsedArray});
         }
    });
@@ -63,7 +62,7 @@ var womenView = Backbone.View.extend({
         //filter through all the items in a collections
         //for each, create a new PersonView
         //append it to root element
-
+        this.collection.reset(this.collection.shuffle(), {silent:true});
         this.collection.each(function(woman){
             //console.log(person);
             var womanView = new WomanView({model:woman});
@@ -109,52 +108,7 @@ var WomanView = Backbone.View.extend({
 var modelwoman = new Woman();
 var viewwoman = new WomanView({model : modelwoman});
 
-var womanCollection = new WomanCollection([
-        {
-        name: 'Shero',
-        id : 1,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Wendy_Davis_%28politician%29',
-        funfact: '',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
 
-    },
-    {
-        name: 'Wendy',
-        id : 2,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Mary_(given_name)',
-        funfact: 'GSPP SPEAKER',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
-
-    },
-    {
-        name: 'Annie Lennox',
-        id : 3,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Jezebel',
-        funfact: 'GSPP SPEAKER',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
-
-    },
-{
-        name: 'New Row',
-        id : 4,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Jezebel',
-        funfact: 'GSPP SPEAKER',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
-
-    }
-      ]);
 
 
 
@@ -169,32 +123,10 @@ womenCall.fetch()
                 /* on successfully loading the data, create a new instance of the main layout view,
                     and feed the model into it. */
                 //var layout = new module.GardenLayoutView({model: baseModel});
-                console.log("fetched");
-                //console.log(dataset);
                 /* show the layout in the region we created at the top of this file */
                 //app.appRegion.show(layout);
                 var womensCollection = new WomanCollection(womenCall.get('dataset'));
-                console.log(typeof(womanCollection));
                 var wv = new womenView ({collection: womensCollection});
                 wv.render();
             });
 
-//Shuffle function for randomizing women
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex ;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}

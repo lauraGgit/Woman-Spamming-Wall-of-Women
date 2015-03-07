@@ -38,7 +38,7 @@ parse: function(data) {
                 parsedArray.push({
                     id: oItem['id']['$t'],
                     name: oItem['gsx$name']['$t'],
-                    field: oItem['gsx$field']['$t'],
+                    field: oItem['gsx$field']['$t'].split(', '),
                     accomplishments: oItem['gsx$thingsshesdone']['$t'],
                     rating: parseInt(oItem['gsx$arbitaryratingofbadassery']['$t'], 10),
                     wiki: oItem['gsx$wikipage']['$t'],
@@ -46,7 +46,6 @@ parse: function(data) {
                     imgUrl: oItem['gsx$imageforvisualizationpurposes']['$t']
                 });
             });
-            shuffle(parsedArray);
             return ({dataset:parsedArray});
         }
    });
@@ -63,21 +62,24 @@ var womenView = Backbone.View.extend({
         //filter through all the items in a collections
         //for each, create a new PersonView
         //append it to root element
-
         this.collection.each(function(woman){
             //console.log(person);
             var womanView = new WomanView({model:woman});
-            this.$el.append(womanView.render().el);
+            this.$el.append($(womanView.render().el).hide().fadeIn("2000"));
         },this);
         // apend the element to body if not exists
         $(this.$el).appendTo('#content');
+        var app_view = new fieldLinkClick({
+                  el: '.field-link',
+                  collection: this.options.fc,
+                  });
     }
 });
 
 // The view for a Woman
 var WomanView = Backbone.View.extend({
     tagName : 'li',
-    className : 'woman',
+    className : 'woman col-md-4',
     id : 'woman-id',
     template: _.template( $('#womanTemplate').html() ),
     initialize : function(){
@@ -106,59 +108,83 @@ var WomanView = Backbone.View.extend({
 
 });
 
-var modelwoman = new Woman();
-var viewwoman = new WomanView({model : modelwoman});
+//Additional Women
+var womenAddView = Backbone.View.extend({
 
-var womanCollection = new WomanCollection([
-        {
-        name: 'Shero',
-        id : 1,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Wendy_Davis_%28politician%29',
-        funfact: '',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
+    render: function(){
+        this.collection.each(function(woman){
+            var womanView = new WomanView({model:woman});
+            $('.women-list').append($(womanView.render().el).hide().fadeIn("2000"));
+        },this);
+                var app_view = new fieldLinkClick({
+                  el: '.field-link',
+                  collection: this.options.fc,
+                  });
+    }
+});
 
-    },
-    {
-        name: 'Wendy',
-        id : 2,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Mary_(given_name)',
-        funfact: 'GSPP SPEAKER',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
 
-    },
-    {
-        name: 'Annie Lennox',
-        id : 3,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Jezebel',
-        funfact: 'GSPP SPEAKER',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
-
-    },
-{
-        name: 'New Row',
-        id : 4,
-        field: 'field',
-        accomplishments: 'All the Things',
-        rating: 1000,
-        wiki: 'http://en.wikipedia.org/wiki/Jezebel',
-        funfact: 'GSPP SPEAKER',
-        imgUrl: 'http://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Wendy_Davis_2013.jpeg/220px-Wendy_Davis_2013.jpeg'
+//Filter from Field
+var filteredView = Backbone.View.extend({
+    render: function(){ 
+        $('.women-list').fadeOut("2000").delay("2000").remove();
+        filt = this.options.filter;
+        //Clone Collection
+        filtCol = _.clone(this.collection);
+        //Filter Clone on field
+        filtCol.reset(filtCol.filter(function(wom){ return ($.inArray(filt, wom.get('field'))) > -1 }));
+        console.log(filtCol.length);
+        //Render New List
+        filterWomen = new womenView ({collection: filtCol, fc: this.collection});
+        filterWomen.render();
 
     }
-      ]);
+});
+
+var fieldLinkClick = Backbone.View.extend({
+    events: {
+              'click': 'resort'
+          },
+          resort: function(ev){
+            reload = true;
+            ev.preventDefault();
+            currFilter = $(ev.currentTarget).data('filter');
+              var filterView = new filteredView({filter: currFilter, collection: this.collection});
+              filterView.render();
+              //alert("clickit or ticket");
+
+          }
+
+});
+
+var allClick = Backbone.View.extend({
+    events: {
+              'click': 'rebuild'
+          },
+          rebuild: function(){
+
+            if (reload === true){
+            $('.women-list').fadeOut("2000").delay("2000").remove();
+               loadmore = 9;
+               console.log("reset loadmore");
+               var cv = new womenView ({collection: initCollection});
+             cv.render();
+            }
+            //
+            
+              
+              //alert("clickit or ticket");
+
+          }
+
+});
+
+
 
 
 
 //Initialize Views
+var loadmore = 9;
 womenCall = new Women();
 womenCall.fetch()
             .fail(function() {
@@ -166,35 +192,41 @@ womenCall.fetch()
                 //console.log("fail");
             })
             .done(function() {
-                /* on successfully loading the data, create a new instance of the main layout view,
-                    and feed the model into it. */
-                //var layout = new module.GardenLayoutView({model: baseModel});
-                console.log("fetched");
-                //console.log(dataset);
-                /* show the layout in the region we created at the top of this file */
-                //app.appRegion.show(layout);
+
                 var womensCollection = new WomanCollection(womenCall.get('dataset'));
-                console.log(typeof(womanCollection));
-                var wv = new womenView ({collection: womensCollection});
+                womensCollection.reset(womensCollection.shuffle(), {silent:true});
+                initCollection = _.clone(womensCollection);
+                initCollection.reset(initCollection.first(loadmore), {silent:true});
+                var wv = new womenView ({collection: initCollection, fc: womensCollection});
                 wv.render();
+                // Add more on scroll
+                $(window).scroll(function() {
+                       if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                        if (loadmore < (womensCollection.length)) {
+                        //socket.emit('get older posts', skipNum);
+                        //skipNum += 10;
+                        console.log("scroll");
+                        //Add new women
+                        clone = _.clone(womensCollection);
+                        clone.reset(clone.rest(loadmore), {silent:true});
+                        clone.reset(clone.first(9), {silent:true});
+                        var moreWomen = new womenAddView ({collection: clone, fc: womensCollection});
+                         moreWomen.render();
+                        loadmore += 9;
+                    }
+                       }
+                    });// End Scroll
+
+                // Filtering
+                 // var app_view = new fieldLinkClick({
+                 // el: '.field-link',
+                 // collection: womensCollection,
+                 // });
+
+                var all_view = new allClick({
+                el: '#all',
+                collection: womensCollection
+                });
+                
             });
 
-//Shuffle function for randomizing women
-function shuffle(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex ;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
-}

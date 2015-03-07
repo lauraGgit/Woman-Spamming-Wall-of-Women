@@ -69,6 +69,7 @@ var womenView = Backbone.View.extend({
         },this);
         // apend the element to body if not exists
         $(this.$el).appendTo('#content');
+
         var app_view = new fieldLinkClick({
                   el: '.field-link',
                   collection: this.options.fc,
@@ -112,13 +113,18 @@ var WomanView = Backbone.View.extend({
 var womenAddView = Backbone.View.extend({
 
     render: function(){
-        this.collection.each(function(woman){
+        console.log("womenAddView");
+        clone = _.clone(this.collection);
+        clone2 = _.clone(this.collection);
+        clone.reset(clone.rest(this.options.lm), {silent:true});
+        clone.reset(clone.first(9), {silent:true});
+        clone.each(function(woman){
             var womanView = new WomanView({model:woman});
             $('.women-list').append($(womanView.render().el).hide().fadeIn("2000"));
         },this);
                 var app_view = new fieldLinkClick({
                   el: '.field-link',
-                  collection: this.options.fc,
+                  collection: clone2,
                   });
     }
 });
@@ -146,7 +152,9 @@ var fieldLinkClick = Backbone.View.extend({
               'click': 'resort'
           },
           resort: function(ev){
+            $( ".field-link").unbind( "click" );
             reload = true;
+            wMFlow = true;
             ev.preventDefault();
             currFilter = $(ev.currentTarget).data('filter');
               var filterView = new filteredView({filter: currFilter, collection: this.collection});
@@ -185,6 +193,7 @@ var allClick = Backbone.View.extend({
 
 //Initialize Views
 var loadmore = 9;
+var wMFlow = true;
 womenCall = new Women();
 womenCall.fetch()
             .fail(function() {
@@ -207,12 +216,12 @@ womenCall.fetch()
                         //skipNum += 10;
                         console.log("scroll");
                         //Add new women
-                        clone = _.clone(womensCollection);
-                        clone.reset(clone.rest(loadmore), {silent:true});
-                        clone.reset(clone.first(9), {silent:true});
-                        var moreWomen = new womenAddView ({collection: clone, fc: womensCollection});
+                        if(wMFlow){
+                        var moreWomen = new womenAddView ({collection: womensCollection, lm: loadmore});
                          moreWomen.render();
                         loadmore += 9;
+                        }
+
                     }
                        }
                     });// End Scroll

@@ -33,6 +33,9 @@
         <li><a href="https://docs.google.com/spreadsheets/d/1xLH5V66pBxx404hKcg98B1_axM0GPdnZZo8IUMmBWKU/edit#gid=0">Add More</a></li>
         <li><a data-toggle="modal" data-target="#myModal">About</a></li>
         </li>
+        </li>
+        <li><a id="all">Show All</a></li>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -69,7 +72,10 @@
    	<a href='<%= wiki %>'><div class="image-box" style="background-image: url(<%= imgUrl %>)"><div class="slide-up"><%= funfact %></div></div>
    	<div class ="bio">
    	<h5><%= name %></h5></a>
-      <span class="field"><%= field %></span><br />
+      <span class="field">
+      <% for(var f in field) { %>
+           <a class="field-link" data-filter="<%= field[f] %>" ><%= field[f] %></a>  
+       <% } %></span><br />
       <span class="accomplish"><%= accomplishments %></span><br />
       </bio>
     </div>

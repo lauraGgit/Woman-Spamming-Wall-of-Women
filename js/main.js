@@ -38,7 +38,7 @@ parse: function(data) {
                 parsedArray.push({
                     id: oItem['id']['$t'],
                     name: oItem['gsx$name']['$t'],
-                    field: oItem['gsx$field']['$t'],
+                    field: oItem['gsx$field']['$t'].split(', '),
                     accomplishments: oItem['gsx$thingsshesdone']['$t'],
                     rating: parseInt(oItem['gsx$arbitaryratingofbadassery']['$t'], 10),
                     wiki: oItem['gsx$wikipage']['$t'],
@@ -69,6 +69,10 @@ var womenView = Backbone.View.extend({
         },this);
         // apend the element to body if not exists
         $(this.$el).appendTo('#content');
+        var app_view = new fieldLinkClick({
+                  el: '.field-link',
+                  collection: this.options.fc,
+                  });
     }
 });
 
@@ -106,25 +110,74 @@ var WomanView = Backbone.View.extend({
 
 //Additional Women
 var womenAddView = Backbone.View.extend({
-    //tagName: 'ul',
-    //className: 'women-list',
+
     render: function(){
-        //filter through all the items in a collections
-        //for each, create a new PersonView
-        //append it to root element
         this.collection.each(function(woman){
-            //console.log(person);
             var womanView = new WomanView({model:woman});
-            //this.$el.append($(womanView.render().el).hide().fadeIn("2000"));
             $('.women-list').append($(womanView.render().el).hide().fadeIn("2000"));
         },this);
-        // apend the element to body if not exists
-        //$(this.$el).appendTo('#content');
+                var app_view = new fieldLinkClick({
+                  el: '.field-link',
+                  collection: this.options.fc,
+                  });
     }
 });
 
-var modelwoman = new Woman();
-var viewwoman = new WomanView({model : modelwoman});
+
+//Filter from Field
+var filteredView = Backbone.View.extend({
+    render: function(){ 
+        $('.women-list').fadeOut("2000").delay("2000").remove();
+        filt = this.options.filter;
+        //Clone Collection
+        filtCol = _.clone(this.collection);
+        //Filter Clone on field
+        filtCol.reset(filtCol.filter(function(wom){ return ($.inArray(filt, wom.get('field'))) > -1 }));
+        console.log(filtCol.length);
+        //Render New List
+        filterWomen = new womenView ({collection: filtCol, fc: this.collection});
+        filterWomen.render();
+
+    }
+});
+
+var fieldLinkClick = Backbone.View.extend({
+    events: {
+              'click': 'resort'
+          },
+          resort: function(ev){
+            reload = true;
+            ev.preventDefault();
+            currFilter = $(ev.currentTarget).data('filter');
+              var filterView = new filteredView({filter: currFilter, collection: this.collection});
+              filterView.render();
+              //alert("clickit or ticket");
+
+          }
+
+});
+
+var allClick = Backbone.View.extend({
+    events: {
+              'click': 'rebuild'
+          },
+          rebuild: function(){
+
+            if (reload === true){
+            $('.women-list').fadeOut("2000").delay("2000").remove();
+               loadmore = 9;
+               console.log("reset loadmore");
+               var cv = new womenView ({collection: initCollection});
+             cv.render();
+            }
+            //
+            
+              
+              //alert("clickit or ticket");
+
+          }
+
+});
 
 
 
@@ -144,9 +197,9 @@ womenCall.fetch()
                 womensCollection.reset(womensCollection.shuffle(), {silent:true});
                 initCollection = _.clone(womensCollection);
                 initCollection.reset(initCollection.first(loadmore), {silent:true});
-                var wv = new womenView ({collection: initCollection});
+                var wv = new womenView ({collection: initCollection, fc: womensCollection});
                 wv.render();
-                
+                // Add more on scroll
                 $(window).scroll(function() {
                        if($(window).scrollTop() + $(window).height() == $(document).height()) {
                         if (loadmore < (womensCollection.length)) {
@@ -155,19 +208,25 @@ womenCall.fetch()
                         console.log("scroll");
                         //Add new women
                         clone = _.clone(womensCollection);
-                        console.log(loadmore);
                         clone.reset(clone.rest(loadmore), {silent:true});
-                        console.log("clone length:");
-                        console.log(clone.length);
                         clone.reset(clone.first(9), {silent:true});
-                        console.log('cut clone');
-                        console.log(clone.length);
-                        var moreWomen = new womenAddView ({collection: clone});
+                        var moreWomen = new womenAddView ({collection: clone, fc: womensCollection});
                          moreWomen.render();
                         loadmore += 9;
                     }
                        }
-                    });
+                    });// End Scroll
+
+                // Filtering
+                 // var app_view = new fieldLinkClick({
+                 // el: '.field-link',
+                 // collection: womensCollection,
+                 // });
+
+                var all_view = new allClick({
+                el: '#all',
+                collection: womensCollection
+                });
                 
             });
 

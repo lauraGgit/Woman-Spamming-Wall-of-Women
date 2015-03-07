@@ -63,7 +63,6 @@ var womenView = Backbone.View.extend({
         //for each, create a new PersonView
         //append it to root element
         this.collection.each(function(woman){
-            //console.log(person);
             var womanView = new WomanView({model:woman});
             this.$el.append($(womanView.render().el).hide().fadeIn("2000"));
         },this);
@@ -85,7 +84,6 @@ var WomanView = Backbone.View.extend({
     template: _.template( $('#womanTemplate').html() ),
     initialize : function(){
         _.bindAll(this,'render');
-        //console.log(this.model)
         this.render();
     },
 
@@ -100,7 +98,6 @@ var WomanView = Backbone.View.extend({
     mouseovercard: function(event) {
     $(event.currentTarget).addClass('hover');
     $(event.currentTarget).children('.slide-up').show();
-    //console.log("hey you're hovering!");
     },
     mouseoutCard: function(event) {
         $(event.currentTarget).removeClass('hover');
@@ -139,7 +136,7 @@ var filteredView = Backbone.View.extend({
         filtCol = _.clone(this.collection);
         //Filter Clone on field
         filtCol.reset(filtCol.filter(function(wom){ return ($.inArray(filt, wom.get('field'))) > -1 }));
-        console.log(filtCol.length);
+        //console.log(filtCol.length);
         //Render New List
         filterWomen = new womenView ({collection: filtCol, fc: this.collection});
         filterWomen.render();
@@ -154,7 +151,7 @@ var fieldLinkClick = Backbone.View.extend({
           resort: function(ev){
             $( ".field-link").unbind( "click" );
             reload = true;
-            wMFlow = true;
+            wMFlow = false;
             ev.preventDefault();
             currFilter = $(ev.currentTarget).data('filter');
               var filterView = new filteredView({filter: currFilter, collection: this.collection});
@@ -172,8 +169,11 @@ var allClick = Backbone.View.extend({
           rebuild: function(){
 
             if (reload === true){
+                wMFlow = true;
+
             $('.women-list').fadeOut("2000").delay("2000").remove();
                loadmore = 9;
+
                console.log("reset loadmore");
                var cv = new womenView ({collection: initCollection});
              cv.render();
@@ -216,7 +216,7 @@ womenCall.fetch()
                         //skipNum += 10;
                         console.log("scroll");
                         //Add new women
-                        if(wMFlow){
+                        if(wMFlow){               
                         var moreWomen = new womenAddView ({collection: womensCollection, lm: loadmore});
                          moreWomen.render();
                         loadmore += 9;

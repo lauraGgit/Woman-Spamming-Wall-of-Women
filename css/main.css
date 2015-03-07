@@ -37,6 +37,7 @@
 	 }
 	.women-list li.hover .slide-up {display:block; transition: display 0.7s ease; background: #222;}
 	.modal {color: #333;}
+	.field-link{text-decoration: underline; cursor:pointer}
 
 	@media (min-width: 992px) {
 .col-md-4 {

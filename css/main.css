@@ -35,6 +35,7 @@
 	 transition: display 0.3s ease;
 	     width: 100%;
     box-sizing: border-box;
+    text-align: center;
 	 }
 	.women-list li.hover .slide-up {display:block; transition: display 0.7s ease; background: #222;}
 	.modal {color: #333;}

@@ -112,16 +112,17 @@ var womenAddView = Backbone.View.extend({
     render: function(){
         console.log("womenAddView");
         clone = _.clone(this.collection);
-        clone2 = _.clone(this.collection);
+        //clone2 = _.clone(this.collection);
         clone.reset(clone.rest(this.options.lm), {silent:true});
         clone.reset(clone.first(9), {silent:true});
+        //console.log(clone2.toJSON());
         clone.each(function(woman){
             var womanView = new WomanView({model:woman});
             $('.women-list').append($(womanView.render().el).hide().fadeIn("2000"));
         },this);
                 var app_view = new fieldLinkClick({
                   el: '.field-link',
-                  collection: clone2,
+                  collection: this.collection,
                   });
     }
 });
@@ -129,13 +130,13 @@ var womenAddView = Backbone.View.extend({
 
 //Filter from Field
 var filteredView = Backbone.View.extend({
-    render: function(){ 
+    render: function(){
         $('.women-list').fadeOut("2000").delay("2000").remove();
         filt = this.options.filter;
         //Clone Collection
         filtCol = _.clone(this.collection);
         //Filter Clone on field
-        filtCol.reset(filtCol.filter(function(wom){ return ($.inArray(filt, wom.get('field'))) > -1 }));
+        filtCol.reset(filtCol.filter(function(wom){ return ($.inArray(filt, wom.get('field'))) > -1;}));
         //console.log(filtCol.length);
         //Render New List
         filterWomen = new womenView ({collection: filtCol, fc: this.collection});
@@ -166,8 +167,8 @@ var allClick = Backbone.View.extend({
     events: {
               'click': 'rebuild'
           },
-          rebuild: function(){
-
+          rebuild: function(ev){
+            ev.preventDefault();
             if (reload === true){
                 wMFlow = true;
 

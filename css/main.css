@@ -1,7 +1,7 @@
-  body {background-color: #222; color: #fff}
-  h5 {margin: 0; font-size: 1.17em;}
-  .header { background: #111; position:fixed; top:0; width: 100%; z-index: 100;}
-  .navbar-inverse{background: #111}
+  body {background-color: #222; color: #fff; font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;}
+  h5 {margin: 0; font-size: 1.17em; font-weight: 600; }
+
+  .navbar-inverse{background: #111;}
   .container-fluid {
   	padding: 5px;
   }
@@ -9,6 +9,7 @@
   color: #efefef;
   font-weight: 500;
   font-size: 22px;
+  font-family: 'Oswald', sans-serif;  
 }
 .nav-right{
 	margin-right: -5px;
